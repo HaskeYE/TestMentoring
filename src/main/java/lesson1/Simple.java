@@ -76,7 +76,7 @@ public class Simple {
      * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
      */
     public static int seconds(int hours, int minutes, int seconds) {
-        return 0;
+        return seconds + minutes * 60 + hours * 3600;
     }
 
 
@@ -88,7 +88,19 @@ public class Simple {
      * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
      */
     public static double lengthInMeters(int sagenes, int arshins, int vershoks) {
-        return 0;
+        double arshinsFactor = 48 / 3.0;
+        double sagenesFactor = 3;
+
+        double vershoksInCm = 4.445;
+        double arshinsInCm = vershoksInCm * arshinsFactor;
+        double sagenesInCm = arshinsInCm * sagenesFactor;
+
+
+        double lengthInCm = vershoks * vershoksInCm;
+        lengthInCm += arshins * arshinsInCm;
+        lengthInCm += sagenes * sagenesInCm;
+
+        return lengthInCm / 100;
     }
 
 
@@ -99,7 +111,9 @@ public class Simple {
      * Вывести значение того же угла в радианах (например, 0.63256).
      */
     public static double angleInRadian(int grad, int min, int sec) {
-        return 0;
+        double decimalGrad = grad + min / 60.0 + sec / 3600.0;
+
+        return decimalGrad * Math.PI/180;
     }
 
 
@@ -110,7 +124,7 @@ public class Simple {
      * Например, расстояние между (3, 0) и (0, 4) равно 5
      */
     public static double trackLength(double x1, double y1, double x2, double y2) {
-        return 0;
+        return Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2));
     }
 
 
@@ -121,7 +135,17 @@ public class Simple {
      * Определить третью цифру справа в этом числе (в данном случае 8).
      */
     public static int thirdDigit(int number) {
-        return 0;
+        int count = 3, counter = 0;
+        int digit = 0;
+
+        while( count != counter ){
+            digit = number % 10;
+            number = number / 10;
+
+            counter++;
+        }
+
+        return digit;
     }
 
 
@@ -133,7 +157,10 @@ public class Simple {
      * Определите время поезда в пути в минутах (в данном случае 216).
      */
     public static int travelMinutes(int hoursDepart, int minutesDepart, int hoursArrive, int minutesArrive) {
-        return 0;
+        int arriveTime = hoursArrive * 60 + minutesArrive;
+        int departTime = hoursDepart * 60 + minutesDepart;
+
+        return arriveTime - departTime;
     }
 
 
@@ -145,7 +172,14 @@ public class Simple {
      * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
      */
     public static double accountInThreeYears(int initial, int percent) {
-        return 0;
+        int years = 3;
+        double account = initial;
+
+        for(int i=0; i<years; i++){
+            account += (account/100) * percent;
+        }
+
+        return account;
     }
 
 
@@ -156,6 +190,9 @@ public class Simple {
      * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
      */
     public static int numberRevert(int number) {
-        return 0;
+        String strNumber = Integer.toString(number);
+        String reversedStrNumber = new StringBuilder(strNumber).reverse().toString();
+
+        return Integer.parseInt(reversedStrNumber);
     }
 }
