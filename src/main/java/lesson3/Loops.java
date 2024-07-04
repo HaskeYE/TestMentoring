@@ -1,5 +1,7 @@
 package lesson3;
 
+import java.sql.SQLOutput;
+
 import static java.lang.Math.sqrt;
 
 public class Loops {
@@ -66,8 +68,16 @@ public class Loops {
      * Использовать операции со строками в этой задаче запрещается.
      */
     public static int digitNumber(int n) {
-        //TODO
-        return 0;
+        int count = 0;
+
+        if(n == 0) return 1;
+
+        while(n > 0){
+            count++;
+            n /= 10;
+        }
+
+        return count;
     }
 
     /**
@@ -77,9 +87,23 @@ public class Loops {
      * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
      */
     public static int fib(int n) {
-        //TODO
-        return 0;
+        if(n <= 1) return n;
+
+        return fib(n-1) + fib(n-2);
     }
+
+    public static int fibiter(int n){
+        if(n <= 1) return n;
+
+        int fib1 = 0, fib2 = 1, fibonacci = 0;
+        for (int i = 2; i <= n; i++) {
+            fibonacci = fib1 + fib2;
+            fib1 = fib2;
+            fib2 = fibonacci;
+        }
+        return fibonacci;
+    }
+
 
     /**
      * Простая
@@ -87,9 +111,28 @@ public class Loops {
      * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
      * минимальное число k, которое делится и на m и на n без остатка
      */
-    public static int lcm(int m, int n) {
-        //TODO
-        return 0;
+    public static int lcm1(int m, int n) {
+        int number = Math.max(m, n);
+
+        while(!(number % m == 0 && number % n == 0)){
+            number++;
+        }
+
+        return number;
+    }
+
+    public static int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    // Метод для нахождения НОК (наименьшее общее кратное)
+    public static int lcm(int a, int b) {
+        return Math.abs(a * b) / gcd(a, b);
     }
 
     /**
@@ -98,8 +141,20 @@ public class Loops {
      * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
      */
     public static int minDivisor(int n) {
-        //TODO
-        return 0;
+        int divisor = 2;
+
+//        while(!(n % divisor == 0)){
+//            divisor++;
+//        }
+
+        for(int i = 2; i <= n; i++){
+            if(n % i == 0){
+                divisor = i;
+                break;
+            }
+        }
+
+        return divisor;
     }
 
     /**
@@ -108,7 +163,13 @@ public class Loops {
      * Для заданного числа n > 1 найти максимальный делитель, меньший n
      */
     public static int maxDivisor(int n) {
-        //TODO
+
+        for(int i = n-1; i > 0; i--){
+            if(n % i == 0){
+                return i;
+            }
+        }
+
         return 0;
     }
 
@@ -120,8 +181,13 @@ public class Loops {
      * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
      */
     public static boolean isCoPrime(int m, int n) {
-        //TODO
-        return false;
+        for(int i = 2; i <= Math.max(m, n); i++){
+            if(m % i == 0 && n % i == 0){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -132,7 +198,16 @@ public class Loops {
      * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
      */
     public static boolean squareBetweenExists(int m, int n) {
-        //TODO
+
+        int start = (int) Math.ceil(Math.sqrt(m));
+        int end = (int) Math.floor(Math.sqrt(n));
+
+        for (int i = start; i <= end; i++) {
+            int square = i * i;
+            if (square >= m && square <= n) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -153,8 +228,18 @@ public class Loops {
      * этого для какого-либо начального X > 0.
      */
     public static int collatzSteps(int x) {
-        //TODO
-        return 0;
+        int steps = 0;
+
+        while(x > 1){
+            if(x % 2 == 0){
+                x = x /2;
+            }else{
+                x = 3 * x + 1;
+            }
+
+            steps++;
+        }
+        return steps;
     }
 
     /**
@@ -165,8 +250,17 @@ public class Loops {
      * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
      */
     public static double sin(double x, double eps) {
-        //TODO
-        return 0;
+        double term = x;
+        double sum = term;
+        int n = 1;
+
+        while (Math.abs(term) >= eps) {
+            term *= -x * x / ((2 * n) * (2 * n + 1));
+            sum += term;
+            n++;
+        }
+
+        return sum;
     }
 
     /**
@@ -177,8 +271,17 @@ public class Loops {
      * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
      */
     public static double cos(double x, double eps) {
-        //TODO
-        return 0;
+        double term = 1.0;
+        double sum = term;
+        int n = 1;
+
+        while(Math.abs(term) >= eps) {
+            term *= -x * x / ((2 * n - 1) * (2 * n));
+            sum += term;
+            n++;
+        }
+
+        return sum;
     }
 
     /**
@@ -189,8 +292,15 @@ public class Loops {
      * Использовать операции со строками в этой задаче запрещается.
      */
     public static int revert(int n) {
-        //TODO
-        return 0;
+        int result = 0;
+
+        while(n > 0){
+            int digit = n % 10;
+            result = result * 10 + digit;
+            n /= 10;
+        }
+
+        return result;
     }
 
     /**
@@ -203,8 +313,7 @@ public class Loops {
      * Использовать операции со строками в этой задаче запрещается.
      */
     public static boolean isPalindrome(int n) {
-        //TODO
-        return false;
+        return n == Loops.revert(n);
     }
 
     /**
@@ -216,7 +325,22 @@ public class Loops {
      * Использовать операции со строками в этой задаче запрещается.
      */
     public static boolean hasDifferentDigits(int n) {
-        //TODO
+        int first, second = 0;
+
+        while(n != 0){
+            first = n % 10;
+
+            n /= 10;
+
+            if(n == 0) return false;
+
+            second = n % 10;
+
+            if(first != second){
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -224,15 +348,32 @@ public class Loops {
      * Сложная
      *
      * Найти n-ю цифру последовательности из квадратов целых чисел:
-     * 149162536496481100121144...
+     * 1 4 9 16 25 36 49 64 81 100 121 144...
      * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
      *
      * Использовать операции со строками в этой задаче запрещается.
      */
     public static int squareSequenceDigit(int n) {
-        //TODO
-        return 0;
+        int counter = 0;
+        int number = 1;
+
+        while (true) {
+            int square = number * number;
+            int numDigits = (int) Math.log10(square) + 1;
+
+            for (int i = numDigits - 1; i >= 0; i--) {
+                int digit = (square / (int) Math.pow(10, i)) % 10;
+                counter++;
+
+                if (counter == n) {
+                    return digit;
+                }
+            }
+
+            number++;
+        }
     }
+
 
     /**
      * Сложная
@@ -244,7 +385,23 @@ public class Loops {
      * Использовать операции со строками в этой задаче запрещается.
      */
     public static int fibSequenceDigit(int n) {
-        //TODO
-        return 0;
+        int counter = 0;
+        int fibonacci;
+        int k = 0;
+
+        while(true){
+            fibonacci = Loops.fib(k++);
+
+            int numDigits = (int) Math.log10(fibonacci) + 1;
+
+            for(int i = numDigits - 1; i >=0; i--){
+                int digit = (fibonacci / (int)Math.pow(10, i)) % 10;
+                counter++;
+
+                if(counter == n){
+                    return digit;
+                }
+            }
+        }
     }
 }
