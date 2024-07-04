@@ -72,8 +72,38 @@ public class IfElse {
      * вернуть строку вида: «21 год», «32 года», «12 лет».
      */
     public static String ageDescription(int age) {
-        //TODO
-        return "";
+        int lastDigit = age % 10;
+        int lastTwoDigits = age % 100;
+
+        String description = switch (lastDigit) {
+            case 1 -> (lastTwoDigits == 11)?"лет":"год";
+            case 2, 3, 4 -> (lastTwoDigits >= 12 && lastTwoDigits <= 14)?"лет":"года";
+            default -> "лет";
+        };
+
+//        String description;
+//
+//        switch(lastDigit){
+//            case 1:
+//                if(lastTwoDigits == 11)
+//                  description = "лет";
+//                else
+//                  description = "год";
+//                break;
+
+//            case 2, 3, 4:
+//                if(lastTwoDigits >= 12 && lastTwoDigits <= 14)
+//                  description = "лет";
+//                else
+//                  description = "года";
+//                break;
+
+//            default:
+//                description = "лет";
+//                break;
+//        }
+
+        return age + " " + description;
     }
 
     /**
@@ -84,8 +114,30 @@ public class IfElse {
      * Определить, за какое время он одолел первую половину пути?
      */
     public static double timeForHalfWay(double t1, double v1, double t2, double v2, double t3, double v3) {
-        //TODO
-        return 0;
+        double way1 = t1 * v1;
+        double way2 = t2 * v2;
+        double way3 = t3 * v3;
+
+        double halfWay = (way1 + way2 + way3) / 2;
+
+        double coveredWay = 0;
+        double time = 0;
+
+        if(way1 >= halfWay){
+            return halfWay / v1;
+        }else{
+            coveredWay = way1;
+            time = t1;
+        }
+
+        if(coveredWay + way2 >= halfWay){
+            return time + (halfWay - coveredWay) / v2;
+        }else{
+            coveredWay += way2;
+            time += t2;
+        }
+
+        return time + (halfWay - coveredWay) / v3;
     }
 
     /**
@@ -98,7 +150,17 @@ public class IfElse {
      * Считать, что ладьи не могут загораживать друг друга
      */
     public static int whichRookThreatens(int kingX, int kingY, int rookX1, int rookY1, int rookX2, int rookY2) {
-        //TODO
+        boolean threatFromRook1 = (kingX == rookX1 || kingY == rookY1) ? true : false;
+        boolean threatFromRook2 = (kingX == rookX2 || kingY == rookY2) ? true : false;
+
+        if(threatFromRook1 && threatFromRook2){
+            return 3;
+        }else if(threatFromRook1){
+            return 1;
+        }else if(threatFromRook2){
+            return 2;
+        }
+
         return 0;
     }
 
@@ -113,7 +175,17 @@ public class IfElse {
      * Считать, что ладья и слон не могут загораживать друг друга.
      */
     public static int rookOrBishopThreatens(int kingX, int kingY, int rookX, int rookY, int bishopX, int bishopY) {
-        //TODO
+        boolean threatFromRook = (kingX == rookX || kingY == rookY);
+        boolean threatFromBishop = (Math.abs(kingX-bishopX) == Math.abs(kingY-bishopY));
+
+        if(threatFromRook && threatFromBishop){
+            return 3;
+        }else if(threatFromRook){
+            return 1;
+        }else if(threatFromBishop){
+            return 2;
+        }
+
         return 0;
     }
 
@@ -126,7 +198,23 @@ public class IfElse {
      * Если такой треугольник не существует, вернуть -1.
      */
     public static int triangleKind(double a, double b, double c) {
-        //TODO
+        if(a + b <= c || a + c <= b || b + c <= a){
+            return -1;
+        }
+
+        double[] sides = {a ,b ,c};
+        java.util.Arrays.sort(sides);
+
+        double x2 = sides[0] * sides[0];
+        double y2 = sides[1] * sides[1];
+        double z2 = sides[2] * sides[2];
+
+        if(x2 + y2 == z2){
+            return 1;
+        }else if(x2 + y2 < z2){
+            return 2;
+        }
+
         return 0;
     }
 
@@ -141,8 +229,38 @@ public class IfElse {
      * (Можно написать двумя способами - через switch statement или if statement
      * будет классно, если будут имплементированы оба и будет написан второй тест)
      */
+
+    public static int segmentLengthIf(int a, int b, int c, int d) {
+        if(b < c || d < a){
+            return -1;
+        }
+
+        int segmentStart;
+        int segmentEnd;
+
+        if(a > c){
+            segmentStart = a;
+        }else{
+            segmentStart = c;
+        }
+
+        if(b < d){
+            segmentEnd = b;
+        }else{
+            segmentEnd = d;
+        }
+
+        return segmentEnd - segmentStart;
+    }
+
     public static int segmentLength(int a, int b, int c, int d) {
-        //TODO
-        return 0;
+        if(b < c || d < a){
+            return -1;
+        }
+
+        int start = Math.max(a, c);
+        int end = Math.min(b, d);
+
+        return Math.max(0, end - start);
     }
 }
