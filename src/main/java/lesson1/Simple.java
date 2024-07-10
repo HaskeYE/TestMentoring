@@ -113,7 +113,7 @@ public class Simple {
     public static double angleInRadian(int grad, int min, int sec) {
         double decimalGrad = grad + min / 60.0 + sec / 3600.0;
 
-        return decimalGrad * Math.PI/180;
+        return decimalGrad * Math.PI / 180;
     }
 
 
@@ -124,7 +124,7 @@ public class Simple {
      * Например, расстояние между (3, 0) и (0, 4) равно 5
      */
     public static double trackLength(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2));
+        return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
     }
 
 
@@ -135,10 +135,11 @@ public class Simple {
      * Определить третью цифру справа в этом числе (в данном случае 8).
      */
     public static int thirdDigit(int number) {
-        int count = 3, counter = 0;
+        int count = 3;
+        int counter = 0;
         int digit = 0;
 
-        while( count != counter ){
+        while (count != counter) {
             digit = number % 10;
             number = number / 10;
 
@@ -175,8 +176,8 @@ public class Simple {
         int years = 3;
         double account = initial;
 
-        for(int i=0; i<years; i++){
-            account += (account/100) * percent;
+        for (int i = 0; i < years; i++) {
+            account += (account / 100) * percent;
         }
 
         return account;

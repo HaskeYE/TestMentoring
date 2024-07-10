@@ -91,10 +91,10 @@ public class ListsTest {
     @Test
     @Tag(name = "Normal")
     public final void center() {
-        assertEquals(List.of(), Lists.center((List)(new ArrayList())));
-        assertArrayEquals(toDoubleArray(List.of(0.0)), toDoubleArray(Lists.center(List.of(new Double[]{3.14}))), 1.0E-5);
-        assertArrayEquals(toDoubleArray(List.of(new Double[]{1.0, -1.0, 0.0})), toDoubleArray(Lists.center(List.of(new Double[]{3.0, 1.0, 2.0}))), 1.0E-5);
-        assertArrayEquals(toDoubleArray(List.of(new Double[]{-3.0, -1.0, 4.0, 5.0, -5.0})), toDoubleArray(Lists.center(List.of(new Double[]{0.0, 2.0, 7.0, 8.0, -2.0}))), 1.0E-5);
+        assertEquals(List.of(), Lists.center(new ArrayList<>()));
+        assertArrayEquals(toDoubleArray(List.of(0.0)), toDoubleArray(Lists.center(new ArrayList<>(List.of(new Double[]{3.14})))), 1.0E-5);
+        assertArrayEquals(toDoubleArray(List.of(new Double[]{1.0, -1.0, 0.0})), toDoubleArray(Lists.center(new ArrayList<>(List.of(new Double[]{3.0, 1.0, 2.0})))), 1.0E-5);
+        assertArrayEquals(toDoubleArray(List.of(new Double[]{-3.0, -1.0, 4.0, 5.0, -5.0})), toDoubleArray(Lists.center(new ArrayList<>(List.of(new Double[]{0.0, 2.0, 7.0, 8.0, -2.0})))), 1.0E-5);
     }
 
     @Test
@@ -119,9 +119,9 @@ public class ListsTest {
     @Tag(name = "Normal")
     public final void accumulate() {
         assertEquals(List.of(), Lists.accumulate(new ArrayList()));
-        assertArrayEquals(toDoubleArray(List.of(3.14)), toDoubleArray(Lists.accumulate(List.of(3.14))), 1.0E-5);
+        assertArrayEquals(toDoubleArray(List.of(3.14)), toDoubleArray(Lists.accumulate(new ArrayList<>(List.of(3.14)))), 1.0E-5);
         assertArrayEquals(toDoubleArray(List.of(new Double[]{1.0, 3.0, 6.0, 10.0})),
-                          toDoubleArray(Lists.accumulate(List.of(1.0, 2.0, 3.0, 4.0))), 1.0E-5);
+                          toDoubleArray(Lists.accumulate(new ArrayList(List.of(1.0, 2.0, 3.0, 4.0)))), 1.0E-5);
     }
 
     @Test

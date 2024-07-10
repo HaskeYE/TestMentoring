@@ -1,7 +1,10 @@
 package lesson4;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 
 import static java.lang.Math.sqrt;
 import static lesson1.Simple.discriminant;
@@ -73,13 +76,25 @@ public class Lists {
      * <p>
      * Изменить знак для всех положительных элементов списка
      */
-    public static List<Integer> invertPositives(List<Integer> list) {
+    public static List<Integer> invertPositives1(List<Integer> list) {
         List<Integer> result = new ArrayList<>(list);
 
         for (int i = 0; i < result.size(); i++) {
             if (result.get(i) > 0)
                 result.set(i, -result.get(i));
         }
+
+        return result;
+    }
+
+    public static List<Integer> invertPositives(List<Integer> list) {
+        List<Integer> result = new ArrayList<>();
+
+        list.forEach(item -> result.add(item > 0 ? -item : item));
+
+//        for(Integer item : list){
+//            result.add(item > 0 ? -item : item);
+//        }
 
         return result;
     }
@@ -143,8 +158,15 @@ public class Lists {
      * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
      * Модуль пустого вектора считать равным 0.0.
      */
-    public static double abs(List v) {
-        return 0.0;
+    public static double abs(List<Double> v) {
+        if (v.isEmpty()) return 0.0;
+
+        double sum = 0.0;
+
+        for (Double item : v) {
+            sum += item * item;
+        }
+        return Math.sqrt(sum);
     }
 
     /**
@@ -153,7 +175,15 @@ public class Lists {
      * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
      */
     public static double mean(List<Double> list) {
-        return 0.0;
+        if (list.isEmpty()) return 0.0;
+
+        double sum = 0.0;
+
+        for (Double item : list) {
+            sum += item;
+        }
+
+        return sum / list.size();
     }
 
 
@@ -166,7 +196,17 @@ public class Lists {
      * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
      */
     public static List<Double> center(List<Double> list) {
-        return null;
+        if (list.isEmpty()) return list;
+
+        double mean = Lists.mean(list);
+
+//        for (int i = 0; i < list.size(); i++) {
+//            list.set(i, list.get(i) - mean);
+//        }
+
+        list.replaceAll(v -> v - mean);
+
+        return list;
     }
 
     /**
@@ -177,8 +217,17 @@ public class Lists {
      * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
      */
     public static double times(List<Double> a, List<Double> b) {
+        double sum = 0.0;
 
-        return 0.0;
+        if (a.isEmpty() || b.isEmpty()) return 0.0;
+
+        if (a.size() != b.size()) return 0.0;
+
+        for (int i = 0; i < a.size(); i++) {
+            sum += a.get(i) * b.get(i);
+        }
+
+        return sum;
     }
 
     /**
@@ -190,7 +239,13 @@ public class Lists {
      * Значение пустого многочлена равно 0.0 при любом x.
      */
     public static double polynom(List<Double> p, double x) {
-        return 0.0;
+        double result = 0.0;
+
+        for (int i = 0; i < p.size(); i++) {
+            result += p.get(i) * Math.pow(x, i);
+        }
+
+        return result;
     }
 
     /**
@@ -204,7 +259,23 @@ public class Lists {
      * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
      */
     public static List<Double> accumulate(List<Double> list) {
-        return null;
+        if (list.isEmpty()) return list;
+
+        List<Double> originalList = new ArrayList<>(list);
+
+        for (int i = 0; i < list.size(); i++) {
+            if (i == 0) continue;
+
+            double sum = 0.0;
+
+            for (int j = 0; j < i; j++) {
+                sum += originalList.get(j);
+            }
+
+            list.set(i, list.get(i) + sum);
+        }
+
+        return list;
     }
 
 
@@ -216,7 +287,25 @@ public class Lists {
      * Множители в списке должны располагаться по возрастанию.
      */
     public static List<Integer> factorize(int n) {
-        return null;
+        List<Integer> result = new ArrayList<>();
+
+        while (n % 2 == 0) {
+            result.add(2);
+            n /= 2;
+        }
+
+        for (int i = 3; i <= Math.sqrt(n); i += 2) {
+            while (n % i == 0) {
+                result.add(i);
+                n /= i;
+            }
+        }
+
+        if (n > 2) {
+            result.add(n);
+        }
+
+        return result;
     }
 
     /**
@@ -227,7 +316,12 @@ public class Lists {
      * Множители в результирующей строке должны располагаться по возрастанию.
      */
     public static String factorizeToString(int n) {
-        return null;
+        List<Integer> intFactorizeList = Lists.factorize(n);
+        List<String> strFactorizeList = new ArrayList<>(intFactorizeList.size());
+
+        intFactorizeList.forEach(v -> strFactorizeList.add(v.toString()));
+
+        return String.join("*", strFactorizeList);
     }
 
     /**
@@ -238,7 +332,16 @@ public class Lists {
      * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
      */
     public static List<Integer> convert(int n, int base) {
-        return null;
+
+        List<Integer> result = new ArrayList<>();
+
+        while (n > 0) {
+            int remainder = n % base;
+            result.add(0, remainder);
+            n /= base;
+        }
+
+        return result;
     }
 
     /**
@@ -250,7 +353,20 @@ public class Lists {
      * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
      */
     public static String convertToString(int n, int base) {
-        return null;
+        if (n == 0) return "0";
+
+        List<Integer> result = Lists.convert(n, base);
+        StringBuilder strResult = new StringBuilder(result.size());
+
+        for (Integer v : result) {
+            if (v > 9) {
+                strResult.append((char) ('a' + v - 10));
+            } else {
+                strResult.append(v);
+            }
+        }
+
+        return strResult.toString();
     }
 
     /**
@@ -261,7 +377,15 @@ public class Lists {
      * Например: digits = (1, 3, 12), base = 14 -> 250
      */
     public static int decimal(List<Integer> digits, int base) {
-        return 0;
+        int result = 0;
+        int power = digits.size() - 1;
+
+        for (Integer digit : digits) {
+            result += digit * Math.pow(base, power);
+            power--;
+        }
+
+        return result;
     }
 
     /**
@@ -274,7 +398,23 @@ public class Lists {
      * Например: str = "13c", base = 14 -> 250
      */
     public static int decimalFromString(String str, int base) {
-        return 0;
+        int result = 0;
+        int length = str.length();
+
+        for (int i = 0; i < length; i++) {
+            char ch = str.charAt(i);
+            int digitValue;
+
+            if (Character.isDigit(ch)) {
+                digitValue = ch - '0';
+            } else {
+                digitValue = ch - 'a' + 10;
+            }
+
+            result += digitValue * Math.pow(base, length - 1 - i);
+        }
+
+        return result;
     }
 
     /**
@@ -286,7 +426,31 @@ public class Lists {
      * Например: 23 = XXIII, 44 = XLIV, 100 = C
      */
     public static String roman(int n) {
-        return null;
+        Map<Integer, String> romanNumerals = new LinkedHashMap<>();
+        romanNumerals.put(1000, "M");
+        romanNumerals.put(900, "CM");
+        romanNumerals.put(500, "D");
+        romanNumerals.put(400, "CD");
+        romanNumerals.put(100, "C");
+        romanNumerals.put(90, "XC");
+        romanNumerals.put(50, "L");
+        romanNumerals.put(40, "XL");
+        romanNumerals.put(10, "X");
+        romanNumerals.put(9, "IX");
+        romanNumerals.put(5, "V");
+        romanNumerals.put(4, "IV");
+        romanNumerals.put(1, "I");
+
+        StringBuilder result = new StringBuilder();
+
+        for (Map.Entry<Integer, String> entry : romanNumerals.entrySet()) {
+            while (n >= entry.getKey()) {
+                result.append(entry.getValue());
+                n -= entry.getKey();
+            }
+        }
+
+        return result.toString();
     }
 
     /**

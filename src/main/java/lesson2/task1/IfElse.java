@@ -76,8 +76,8 @@ public class IfElse {
         int lastTwoDigits = age % 100;
 
         String description = switch (lastDigit) {
-            case 1 -> (lastTwoDigits == 11)?"лет":"год";
-            case 2, 3, 4 -> (lastTwoDigits >= 12 && lastTwoDigits <= 14)?"лет":"года";
+            case 1 -> (lastTwoDigits == 11) ? "лет" : "год";
+            case 2, 3, 4 -> (lastTwoDigits >= 12 && lastTwoDigits <= 14) ? "лет" : "года";
             default -> "лет";
         };
 
@@ -123,16 +123,16 @@ public class IfElse {
         double coveredWay = 0;
         double time = 0;
 
-        if(way1 >= halfWay){
+        if (way1 >= halfWay) {
             return halfWay / v1;
-        }else{
+        } else {
             coveredWay = way1;
             time = t1;
         }
 
-        if(coveredWay + way2 >= halfWay){
+        if (coveredWay + way2 >= halfWay) {
             return time + (halfWay - coveredWay) / v2;
-        }else{
+        } else {
             coveredWay += way2;
             time += t2;
         }
@@ -153,11 +153,11 @@ public class IfElse {
         boolean threatFromRook1 = (kingX == rookX1 || kingY == rookY1) ? true : false;
         boolean threatFromRook2 = (kingX == rookX2 || kingY == rookY2) ? true : false;
 
-        if(threatFromRook1 && threatFromRook2){
+        if (threatFromRook1 && threatFromRook2) {
             return 3;
-        }else if(threatFromRook1){
+        } else if (threatFromRook1) {
             return 1;
-        }else if(threatFromRook2){
+        } else if (threatFromRook2) {
             return 2;
         }
 
@@ -176,13 +176,13 @@ public class IfElse {
      */
     public static int rookOrBishopThreatens(int kingX, int kingY, int rookX, int rookY, int bishopX, int bishopY) {
         boolean threatFromRook = (kingX == rookX || kingY == rookY);
-        boolean threatFromBishop = (Math.abs(kingX-bishopX) == Math.abs(kingY-bishopY));
+        boolean threatFromBishop = (Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY));
 
-        if(threatFromRook && threatFromBishop){
+        if (threatFromRook && threatFromBishop) {
             return 3;
-        }else if(threatFromRook){
+        } else if (threatFromRook) {
             return 1;
-        }else if(threatFromBishop){
+        } else if (threatFromBishop) {
             return 2;
         }
 
@@ -198,20 +198,20 @@ public class IfElse {
      * Если такой треугольник не существует, вернуть -1.
      */
     public static int triangleKind(double a, double b, double c) {
-        if(a + b <= c || a + c <= b || b + c <= a){
+        if (a + b <= c || a + c <= b || b + c <= a) {
             return -1;
         }
 
-        double[] sides = {a ,b ,c};
+        double[] sides = {a, b, c};
         java.util.Arrays.sort(sides);
 
         double x2 = sides[0] * sides[0];
         double y2 = sides[1] * sides[1];
         double z2 = sides[2] * sides[2];
 
-        if(x2 + y2 == z2){
+        if (x2 + y2 == z2) {
             return 1;
-        }else if(x2 + y2 < z2){
+        } else if (x2 + y2 < z2) {
             return 2;
         }
 
@@ -231,22 +231,22 @@ public class IfElse {
      */
 
     public static int segmentLengthIf(int a, int b, int c, int d) {
-        if(b < c || d < a){
+        if (b < c || d < a) {
             return -1;
         }
 
         int segmentStart;
         int segmentEnd;
 
-        if(a > c){
+        if (a > c) {
             segmentStart = a;
-        }else{
+        } else {
             segmentStart = c;
         }
 
-        if(b < d){
+        if (b < d) {
             segmentEnd = b;
-        }else{
+        } else {
             segmentEnd = d;
         }
 
@@ -254,7 +254,7 @@ public class IfElse {
     }
 
     public static int segmentLength(int a, int b, int c, int d) {
-        if(b < c || d < a){
+        if (b < c || d < a) {
             return -1;
         }
 
