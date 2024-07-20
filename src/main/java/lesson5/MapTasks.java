@@ -1,11 +1,6 @@
 package lesson5;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MapTasks {
 
@@ -77,8 +72,24 @@ public class MapTasks {
      * mapOf("Emergency" to "911", "Police" to "02")
      * ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
      */
-    public static Map<String,String> mergePhoneBooks(Map<String,String> mapA, Map<String,String> mapB) {
-        return null;
+    public static Map<String, String> mergePhoneBooks(Map<String, String> mapA, Map<String, String> mapB) {
+
+        Map<String, String> mergedMap = new HashMap<>(mapA);
+
+        for (String key : mapB.keySet()) {
+            String value = mapB.get(key);
+
+            if (mergedMap.containsKey(key)) {
+                String existingValue = mergedMap.get(key);
+                if (!existingValue.equals(value))
+                    mergedMap.put(key, existingValue + ", " + value);
+//                mergedMap.compute(key, (k, existingValue) -> existingValue.equals(value) ? existingValue : existingValue + ", " + value);
+            } else {
+                mergedMap.put(key, value);
+            }
+        }
+
+        return mergedMap;
     }
 
     /**
@@ -92,8 +103,24 @@ public class MapTasks {
      * -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
      */
 
-    public static Map<String,Integer> buildGrades(Map<String,Integer> grades) {
-        return null;
+    public static Map<Integer, List<String>> buildGrades(Map<String, Integer> grades) {
+        Map<Integer, List<String>> resultGrades = new HashMap<>();
+
+        for (String name : grades.keySet()) {
+            int grade = grades.get(name);
+
+//            if (resultGrades.containsKey(grade)) {
+//                List<String> names = resultGrades.get(grade);
+//                names.add(name);
+//                resultGrades.put(grade, names);
+//            } else {
+//                resultGrades.put(grade, new ArrayList<>(List.of(name)));
+//            }
+
+            resultGrades.computeIfAbsent(grade, k -> new ArrayList<>()).add(name);
+        }
+
+        return resultGrades;
     }
 
     /**
@@ -106,8 +133,14 @@ public class MapTasks {
      * containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
      * containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
      */
-    public static boolean containsIn(Map<String,String> a, Map<String,String> b) {
-        return false;
+    public static boolean containsIn(Map<String, String> a, Map<String, String> b) {
+        for (String key : a.keySet()) {
+            if (!b.containsKey(key) || !b.get(key).equals(a.get(key))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -120,8 +153,25 @@ public class MapTasks {
      * averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
      * -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
      */
-    public static Map<String,Double> averageStockPrice(Map<String,Double> stockPrices) {
+    public static Map<String, Double> averageStockPriceF(Map<String, Double> stockPrices) {
         return null;
+    }
+
+    public static Map<String, Double> averageStockPrice(Map<String, List<Double>> stockPrices) {
+        Map<String, Double> averageStockPrice = new HashMap<>();
+
+        for (String stock : stockPrices.keySet()) {
+            double sum = 0.0;
+            int listSize = stockPrices.get(stock).size();
+
+            for (int i = 0; i < listSize; i++) {
+                sum += stockPrices.get(stock).get(i);
+            }
+
+            averageStockPrice.put(stock, sum / listSize);
+        }
+
+        return averageStockPrice;
     }
 
     /**
@@ -139,8 +189,25 @@ public class MapTasks {
      * "печенье"
      * ) -> "Мария"
      */
-    public static String findCheapestStuff(Map<String,Double> stuff, String kind) {
-        return "";
+    public static String findCheapestStuff(Map<String, Map<String, Double>> stuff, String kind) {
+        String stuffName = null;
+        Double minPrice = null;
+
+        for (Map.Entry<String, Map<String, Double>> stuffItem : stuff.entrySet()) {
+            String itemName = stuffItem.getKey();
+            Map<String, Double> itemDetails = stuffItem.getValue();
+
+            if (itemDetails.containsKey(kind)) {
+                Double itemPrice = itemDetails.get(kind);
+
+                if (minPrice == null || minPrice > itemPrice) {
+                    minPrice = itemPrice;
+                    stuffName = itemName;
+                }
+            }
+        }
+
+        return stuffName;
     }
 
     /**
@@ -167,7 +234,7 @@ public class MapTasks {
      * "Mikhail" to setOf("Sveta", "Marat")
      * )
      */
-    public static Map<String,String> propagateHandshakes(Map<String,Set<String>> friends) {
+    public static Map<String, String> propagateHandshakes(Map<String, Set<String>> friends) {
         return null;
     }
 
@@ -185,8 +252,18 @@ public class MapTasks {
      * subtractOf(a = MapOf("a" to "z"), mapOf("a" to "z"))
      * -> a changes to MapOf() aka becomes empty
      */
-    public static boolean subtractOf(Map<String,String> a, Map<String,String> b) {
-        return false;
+    public static boolean subtractOf(Map<String, String> a, Map<String, String> b) {
+
+        for (String key : b.keySet()) {
+            String valueFromA = a.get(key);
+            String valueFromB = b.get(key);
+
+            if (a.containsKey(key) && valueFromA.equals(valueFromB)) {
+                a.remove(key);
+            }
+        }
+
+        return true;
     }
 
 
@@ -196,7 +273,19 @@ public class MapTasks {
      * Для двух списков людей найти людей, встречающихся в обоих списках
      */
     public static List<String> whoAreInBoth(List<String> a, List<String> b) {
-        return null;
+        List<String> intersection = new ArrayList<>();
+
+        a.forEach(name -> {
+            if (b.contains(name)) intersection.add(name);
+        });
+
+//        for (String name : a) {
+//            if (b.contains(name)) {
+//                intersection.add(name);
+//            }
+//        }
+
+        return intersection;
     }
 
     /**
@@ -211,8 +300,35 @@ public class MapTasks {
      * Например:
      * extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
      */
-    public static Map<String,Integer> extractRepeats(List<String> list) {
-        return null;
+    public static Map<String, Integer> extractRepeats(List<String> list) {
+        Map<String, Integer> counter = new HashMap<>();
+        Map<String, Integer> result = new HashMap<>();
+
+//        for (String searchItem : list) {
+//            int repeatCount = 0;
+//
+//            if (!result.containsKey(searchItem)) {
+//                for (String item : list) {
+//                    if (searchItem.equals(item)) {
+//                        repeatCount++;
+//                    }
+//                }
+//
+//                if (repeatCount > 1) {
+//                    result.put(searchItem, repeatCount);
+//                }
+//            }
+//        }
+
+        for (String searchItem : list) {
+            counter.put(searchItem, counter.getOrDefault(searchItem, 0) + 1);
+        }
+
+        counter.forEach((key, value) -> {
+            if (value > 1) result.put(key, value);
+        });
+
+        return result;
     }
 
     /**
@@ -225,6 +341,21 @@ public class MapTasks {
      * hasAnagrams(listOf("тор", "свет", "рот")) -> true
      */
     public static boolean hasAnagrams(List<String> words) {
+        Set<String> wordsSet = new HashSet<>();
+
+        for (String word : words) {
+            char[] letters = word.toCharArray();
+            Arrays.sort(letters);
+
+            String strWord = new String(letters);
+
+            if (wordsSet.contains(strWord)) {
+                return true;
+            }
+
+            wordsSet.add(strWord);
+        }
+
         return false;
     }
 
@@ -250,8 +381,8 @@ public class MapTasks {
      */
 
 
-    public static Set<String> bagPacking(Map<String,Integer> treasures, int capacity) {
+    public static Set<String> bagPacking(Map<String, Integer> treasures, int capacity) {
         return null;
     }
 
-    }
+}
