@@ -195,10 +195,68 @@ public class MapTasksTest {
         };
     }
 
-    @Test
+    @Test(dataProvider = "dataForPropagateHandshakes")
     @Tag(name = "Hard")
-    public final void propagateHandshakes() {
+    public final void propagateHandshakes(Map<String, Set<String>> friends, Map<String, Set<String>> expectedResultMap) {
+        assertEquals(MapTasks.propagateHandshakes(friends), expectedResultMap, "Friends list is incorrect");
+    }
 
+    @DataProvider(name = "dataForPropagateHandshakes")
+    public static Object[][] dataForPropagateHandshakes() {
+        return new Object[][]{
+                {
+                        Map.of(
+                                "Marat", Set.of(),
+                                "Sveta", Set.of(),
+                                "Mikhail", Set.of(),
+                                "Oleg", Set.of("Ivan")
+                        ),
+                        Map.of(
+                                "Marat", Set.of(),
+                                "Sveta", Set.of(),
+                                "Mikhail", Set.of(),
+                                "Oleg", Set.of("Ivan")
+                        )
+                },
+                {
+                        Map.of(
+                                "Marat", Set.of("Mikhail", "Sveta"),
+                                "Sveta", Set.of("Marat"),
+                                "Mikhail", Set.of("Sveta")
+                        ),
+                        Map.of(
+                                "Marat", Set.of("Mikhail", "Sveta"),
+                                "Sveta", Set.of("Marat", "Mikhail"),
+                                "Mikhail", Set.of("Sveta", "Marat")
+                        )
+                },
+                {
+                        Map.of(
+                                "Marat", Set.of("Mikhail", "Sveta", "Oleg", "Sergei"),
+                                "Sveta", Set.of("Marat"),
+                                "Mikhail", Set.of("Sveta", "Semen", "Ivan")
+                        ),
+                        Map.of(
+                                "Marat", Set.of("Mikhail", "Sveta", "Oleg", "Sergei", "Semen", "Ivan"),
+                                "Sveta", Set.of("Marat", "Mikhail", "Oleg", "Sergei", "Semen", "Ivan"),
+                                "Mikhail", Set.of("Sveta", "Marat", "Oleg", "Sergei", "Semen", "Ivan")
+                        )
+                },
+                {
+                        Map.of(
+                                "Marat", Set.of("Mikhail", "Sveta"),
+                                "Sveta", Set.of("Marat", "Ivan"),
+                                "Mikhail", Set.of("Sveta"),
+                                "Ivan", Set.of("Oleg")
+                        ),
+                        Map.of(
+                                "Marat", Set.of("Mikhail", "Sveta", "Ivan", "Oleg"),
+                                "Sveta", Set.of("Marat", "Ivan", "Mikhail", "Oleg"),
+                                "Mikhail", Set.of("Sveta", "Marat", "Oleg", "Ivan"),
+                                "Ivan", Set.of("Oleg")
+                        )
+                }
+        };
     }
 
     @Test(dataProvider = "dataForSubtractOf")
@@ -213,11 +271,11 @@ public class MapTasksTest {
         return new Object[][]{
                 {
                         new HashMap<>(Map.of(
-                        "MSFT", "100.0",
-                        "NFLX", "40.0",
-                        "APPL", "300"
-                )),
-                       new HashMap<>(Map.of(
+                                "MSFT", "100.0",
+                                "NFLX", "40.0",
+                                "APPL", "300"
+                        )),
+                        new HashMap<>(Map.of(
                                 "MSFT", "100.0",
                                 "NFLX", "40.0",
                                 "APPL", "300"

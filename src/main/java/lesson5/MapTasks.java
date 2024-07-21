@@ -234,8 +234,35 @@ public class MapTasks {
      * "Mikhail" to setOf("Sveta", "Marat")
      * )
      */
-    public static Map<String, String> propagateHandshakes(Map<String, Set<String>> friends) {
-        return null;
+    public static Map<String, Set<String>> propagateHandshakes(Map<String, Set<String>> friends) {
+        Map<String, Set<String>> result = new HashMap<>();
+
+        // Итерируем по каждому человеку
+        for (String person : friends.keySet()) {
+            Set<String> allFriends = new HashSet<>();
+            Set<String> visited = new HashSet<>();
+
+            dfs(person, friends, allFriends, visited);
+
+            allFriends.remove(person); // удаляем самого себя из списка друзей
+            result.put(person, allFriends);
+        }
+
+        return result;
+    }
+
+    private static void dfs(String person, Map<String, Set<String>> friends, Set<String> allFriends, Set<String> visited) {
+        if (visited.contains(person)) return;
+
+        visited.add(person);
+        if (friends.containsKey(person)) {
+            for (String friend : friends.get(person)) {
+                if (!visited.contains(friend)) {
+                    allFriends.add(friend);
+                    dfs(friend, friends, allFriends, visited);
+                }
+            }
+        }
     }
 
     /**
