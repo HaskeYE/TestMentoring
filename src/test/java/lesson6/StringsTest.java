@@ -40,7 +40,9 @@ public class StringsTest {
     @Tag(name = "Normal")
     public final void dateStrToDigit() {
         assertEquals("15.07.2016", Strings.dateStrToDigit("15 июля 2016"));
-        assertEquals("29.02.0", Strings.dateStrToDigit("29 февраля 0"));
+        assertEquals("", Strings.dateStrToDigit("29 февраля 0"));
+        assertEquals("02.12.2", Strings.dateStrToDigit("02 декабря 2"));
+        assertEquals("", Strings.dateStrToDigit("30 февраля 2009"));
         assertEquals("", Strings.dateStrToDigit("3 мартобря 1918"));
         assertEquals("", Strings.dateStrToDigit(">J.X6?*qg{b*/;N\\\\\\t[P|hgyM[/Y7kTU}+Fd.`pg):fNWN 32>\\\"'.$Mn&>#|)dOqXS;4I$2s\\n*n<yz~NsgC*xWP'p~rbGl|=)qiyX>U(lK,s>Lu8x}lu%{{+u)j's8Zie1\\n{de~Yik{1[FuZHM!qU_9.<`%I0/T(, .>I/7?Nt;\\\\UCb;MJbD*WWDqCx0NvXq,'6m^-W^H[\\\"ZS4-D~(8n~PCxCk1pHt'N##dfOC\\\"F-3Bm8U}n0\\\\:tJrC"));
         assertEquals("18.11.2018", Strings.dateStrToDigit("18 ноября 2018"));
@@ -75,6 +77,7 @@ public class StringsTest {
         assertEquals("", Strings.flattenPhoneNumber("ab-123"));
         assertEquals("", Strings.flattenPhoneNumber("+5 )24( 324"));
         assertEquals("+12345", Strings.flattenPhoneNumber("+12 (3) 4-5"));
+        assertEquals("+12345", Strings.flattenPhoneNumber("+12 (3 4-5"));
         assertEquals("", Strings.flattenPhoneNumber("134_+874"));
         assertEquals("", Strings.flattenPhoneNumber("+7+)("));
         assertEquals("", Strings.flattenPhoneNumber("+"));

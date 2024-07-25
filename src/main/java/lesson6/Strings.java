@@ -1,8 +1,11 @@
 package lesson6;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static lesson1.Simple.seconds;
 
@@ -44,7 +47,7 @@ public class Strings {
         int minute = seconds % 3600 / 60;
         int second = seconds % 60;
 
-        return String.format("%02d:%02d:%02d",  hour, minute, second);
+        return String.format("%02d:%02d:%02d", hour, minute, second);
     }
 
 
@@ -60,7 +63,29 @@ public class Strings {
      * входными данными.
      */
     public static final String dateStrToDigit(String str) {
-        return null;
+
+        DateFormat inputFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("ru"));
+        DateFormat outputFormat = new SimpleDateFormat("dd.MM.y");
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(inputFormat.parse(str));
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ru"));
+            int year = calendar.get(Calendar.YEAR);
+
+            String recreactedDateStr1 = String.format("%d %s %d", day, month, year);
+            String recreactedDateStr2 = String.format("%02d %s %d", day, month, year);
+
+            if (!(str.equals(recreactedDateStr1) || str.equals(recreactedDateStr2))) {
+                return "";
+            }
+
+            return outputFormat.format(calendar.getTime());
+        } catch (ParseException e) {
+            return "";
+        }
     }
 
 
@@ -75,7 +100,27 @@ public class Strings {
      * входными данными.
      */
     public static final String dateDigitToStr(String digital) {
-        return null;
+        DateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat outputFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("ru"));
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(inputFormat.parse(digital));
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+
+            String recreatedDateStr = String.format("%02d.%02d.%d", day, month, year);
+
+            if (!digital.equals(recreatedDateStr)) {
+                return "";
+            }
+
+            return outputFormat.format(calendar.getTime());
+        } catch (ParseException e) {
+            return "";
+        }
     }
 
     /**
@@ -91,7 +136,15 @@ public class Strings {
      * При неверном формате вернуть пустую строку
      */
     public static final String flattenPhoneNumber(String phone) {
-        return null;
+        String cleanedPhone = phone.replaceAll("[\\s-]", "");
+
+        if (!cleanedPhone.matches("[+\\d]*\\(?\\d*\\)?\\d+")) {
+            return "";
+        }
+
+        cleanedPhone = cleanedPhone.replaceAll("[()]", "");
+
+        return cleanedPhone;
     }
 
     /**
@@ -105,7 +158,22 @@ public class Strings {
      * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
      */
     public static final int bestLongJump(String jumps) {
-        return 0;
+        if (!jumps.matches("(?:\\d+|[%-])(?:\\s(?:\\d+|[%-]))*")) {
+            return -1;
+        }
+
+        Pattern pattern = Pattern.compile("(\\d+|[%-])");
+        Matcher matcher = pattern.matcher(jumps);
+
+        List<Integer> successfulJumps = new ArrayList<>();
+
+        while (matcher.find()) {
+            String match = matcher.group(1);
+            if (match.matches("\\d+"))
+                successfulJumps.add(Integer.valueOf(match));
+        }
+
+        return !successfulJumps.isEmpty() ? Collections.max(successfulJumps) : -1;
     }
 
 
@@ -120,7 +188,26 @@ public class Strings {
      * При нарушении формата входной строки вернуть -1.
      */
     public static final int bestHighJump(String jumps) {
-        return 0;
+        if (!jumps.matches("\\d+\\s[%+-]+(?:\\s\\d+\\s[%+-]+)*")) {
+            return -1;
+        }
+
+        Pattern pattern = Pattern.compile("(\\d+\\s[%+-]+)");
+        Matcher matcher = pattern.matcher(jumps);
+
+        List<Integer> highJumps = new ArrayList<>();
+
+        while (matcher.find()) {
+            List<String> match = List.of(matcher.group(1).split("\\s"));
+            String jumpHeight = match.get(0);
+            String attempts = match.get(1);
+
+            if (attempts.contains("+") && jumpHeight.matches("\\d+")) {
+                highJumps.add(Integer.valueOf(jumpHeight));
+            }
+        }
+
+        return !highJumps.isEmpty() ? Collections.max(highJumps) : -1;
     }
 
     /**
