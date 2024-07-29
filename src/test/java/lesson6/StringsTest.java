@@ -106,11 +106,16 @@ public class StringsTest {
         assertEquals(0, Strings.plusMinus("0"));
         assertEquals(4, Strings.plusMinus("2 + 2"));
         assertEquals(6, Strings.plusMinus("2 + 31 - 40 + 13"));
+        assertEquals(2, Strings.plusMinus("-2 + 31 - 40 + 13"));
         assertEquals(-7, Strings.plusMinus("2 + 31 - 40"));
         assertEquals(-1, Strings.plusMinus("0 - 1"));
         assertEquals(4, Strings.plusMinus("4"));
-        assertThrows(IllegalArgumentException.class, null);
-        
+        assertThrows(IllegalArgumentException.class, () -> {
+            Strings.plusMinus("2 ++ 31 - 40 + 13");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            Strings.plusMinus("-42 0 + 13");
+        });
     }
 
     @Test
@@ -137,6 +142,8 @@ public class StringsTest {
     @Tag(name = "Hard")
     public final void fromRoman() {
         assertEquals(1, Strings.fromRoman("I"));
+        assertEquals(8, Strings.fromRoman("VIII"));
+        assertEquals(-1, Strings.fromRoman("VIIII"));
         assertEquals(3000, Strings.fromRoman("MMM"));
         assertEquals(1978, Strings.fromRoman("MCMLXXVIII"));
         assertEquals(694, Strings.fromRoman("DCXCIV"));
