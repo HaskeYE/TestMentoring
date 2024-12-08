@@ -81,6 +81,18 @@ public class IfElseTest {
 
     @Test
     @Tag(name = "Normal")
+    public final void segmentLengthIf() {
+        assertEquals(-1, IfElse.segmentLengthIf(1, 2, 3, 4));
+        assertEquals(-1, IfElse.segmentLengthIf(5, 7, 1, 3));
+        assertEquals(0, IfElse.segmentLengthIf(1, 2, 2, 4));
+        assertEquals(3, IfElse.segmentLengthIf(3, 6, 0, 9));
+        assertEquals(2, IfElse.segmentLengthIf(2, 5, 3, 9));
+        assertEquals(1, IfElse.segmentLengthIf(3, 6, 1, 4));
+        assertEquals(4, IfElse.segmentLengthIf(1, 15, 10, 14));
+    }
+
+    @Test
+    @Tag(name = "Normal")
     public final void segmentLength() {
         assertEquals(-1, IfElse.segmentLength(1, 2, 3, 4));
         assertEquals(-1, IfElse.segmentLength(5, 7, 1, 3));

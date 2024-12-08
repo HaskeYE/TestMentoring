@@ -1,8 +1,11 @@
 package lesson6;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static lesson1.Simple.seconds;
 
@@ -44,7 +47,7 @@ public class Strings {
         int minute = seconds % 3600 / 60;
         int second = seconds % 60;
 
-        return String.format("%02d:%02d:%02d",  hour, minute, second);
+        return String.format("%02d:%02d:%02d", hour, minute, second);
     }
 
 
@@ -60,7 +63,29 @@ public class Strings {
      * входными данными.
      */
     public static final String dateStrToDigit(String str) {
-        return null;
+
+        DateFormat inputFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("ru"));
+        DateFormat outputFormat = new SimpleDateFormat("dd.MM.y");
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(inputFormat.parse(str));
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("ru"));
+            int year = calendar.get(Calendar.YEAR);
+
+            String recreactedDateStr1 = String.format("%d %s %d", day, month, year);
+            String recreactedDateStr2 = String.format("%02d %s %d", day, month, year);
+
+            if (!(str.equals(recreactedDateStr1) || str.equals(recreactedDateStr2))) {
+                return "";
+            }
+
+            return outputFormat.format(calendar.getTime());
+        } catch (ParseException e) {
+            return "";
+        }
     }
 
 
@@ -75,7 +100,27 @@ public class Strings {
      * входными данными.
      */
     public static final String dateDigitToStr(String digital) {
-        return null;
+        DateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat outputFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("ru"));
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(inputFormat.parse(digital));
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+
+            String recreatedDateStr = String.format("%02d.%02d.%d", day, month, year);
+
+            if (!digital.equals(recreatedDateStr)) {
+                return "";
+            }
+
+            return outputFormat.format(calendar.getTime());
+        } catch (ParseException e) {
+            return "";
+        }
     }
 
     /**
@@ -91,7 +136,15 @@ public class Strings {
      * При неверном формате вернуть пустую строку
      */
     public static final String flattenPhoneNumber(String phone) {
-        return null;
+        String cleanedPhone = phone.replaceAll("[\\s-]", "");
+
+        if (!cleanedPhone.matches("[+\\d]*\\(?\\d*\\)?\\d+")) {
+            return "";
+        }
+
+        cleanedPhone = cleanedPhone.replaceAll("[()]", "");
+
+        return cleanedPhone;
     }
 
     /**
@@ -105,7 +158,22 @@ public class Strings {
      * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
      */
     public static final int bestLongJump(String jumps) {
-        return 0;
+        if (!jumps.matches("(?:\\d+|[%-])(?:\\s(?:\\d+|[%-]))*")) {
+            return -1;
+        }
+
+        Pattern pattern = Pattern.compile("(\\d+|[%-])");
+        Matcher matcher = pattern.matcher(jumps);
+
+        List<Integer> successfulJumps = new ArrayList<>();
+
+        while (matcher.find()) {
+            String match = matcher.group(1);
+            if (match.matches("\\d+"))
+                successfulJumps.add(Integer.valueOf(match));
+        }
+
+        return !successfulJumps.isEmpty() ? Collections.max(successfulJumps) : -1;
     }
 
 
@@ -120,7 +188,26 @@ public class Strings {
      * При нарушении формата входной строки вернуть -1.
      */
     public static final int bestHighJump(String jumps) {
-        return 0;
+        if (!jumps.matches("\\d+\\s[%+-]+(?:\\s\\d+\\s[%+-]+)*")) {
+            return -1;
+        }
+
+        Pattern pattern = Pattern.compile("(\\d+\\s[%+-]+)");
+        Matcher matcher = pattern.matcher(jumps);
+
+        List<Integer> highJumps = new ArrayList<>();
+
+        while (matcher.find()) {
+            List<String> match = List.of(matcher.group(1).split("\\s"));
+            String jumpHeight = match.get(0);
+            String attempts = match.get(1);
+
+            if (attempts.contains("+") && jumpHeight.matches("\\d+")) {
+                highJumps.add(Integer.valueOf(jumpHeight));
+            }
+        }
+
+        return !highJumps.isEmpty() ? Collections.max(highJumps) : -1;
     }
 
     /**
@@ -133,8 +220,23 @@ public class Strings {
      * Про нарушении формата входной строки бросить исключение IllegalArgumentException
      */
 //Works with first element = +4/-4
-    public static final int plusMinus(String expression) {
-        return 0;
+    public static final int plusMinus(String expression) throws IllegalArgumentException {
+        if (!expression.matches("[+-]?\\d+(?:\\s[+-]+\\s\\d+)*")) {
+            throw new IllegalArgumentException();
+        }
+
+        expression = expression.replace(" ", "");
+
+        String[] tokens = expression.split("(?=[+-])");
+        int result = 0;
+
+        for (String token : tokens) {
+            if (!token.isEmpty()) {
+                result += Integer.parseInt(token);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -148,7 +250,21 @@ public class Strings {
      */
 
     public static final int firstDuplicateIndex(String str) {
-        return 0;
+        String[] words = str.split("\\s");
+
+        int index = 0;
+        for (int i = 0; i < words.length-1; i++) {
+            String word = words[i];
+            String nextWord = words[i+1];
+
+            if (word.equalsIgnoreCase(nextWord)){
+                return str.indexOf(word, index);
+            }
+
+            index += word.length() + 1;
+        }
+
+        return -1;
     }
 
 
@@ -164,7 +280,29 @@ public class Strings {
      * Все цены должны быть больше либо равны нуля.
      */
     public static final String mostExpensive(String description) {
-        return null;
+        if (description.isEmpty() || !description.matches("[а-яА-Я]+\\s\\d+(?:\\.?\\d+)*(?:;\\s[а-яА-Я]+\\s\\d+(?:\\.?\\d+)*)*")) {
+            return "";
+        }
+
+        String[] goods = description.split("; ");
+        Map<String, Double> prices = new HashMap<>();
+
+        for (String item : goods) {
+            String[] product = item.split(" ");
+
+            prices.put(product[0], Double.valueOf(product[1]));
+        }
+
+        double maxPrice = 0.0;
+        String maxProductName = "";
+        for (String productName : prices.keySet()) {
+           if (maxPrice < prices.get(productName)) {
+               maxPrice = prices.get(productName);
+               maxProductName = productName;
+           }
+        }
+
+        return maxProductName;
     }
 
     /**
@@ -179,9 +317,45 @@ public class Strings {
      * Вернуть -1, если roman не является корректным римским числом
      */
 
-
     public static final int fromRoman(String roman) {
-        return 0;
+
+        Map<Character, Integer> romanMap = new HashMap<>();
+
+        romanMap.put('I', 1);
+        romanMap.put('V', 5);
+        romanMap.put('X', 10);
+        romanMap.put('L', 50);
+        romanMap.put('C', 100);
+        romanMap.put('D', 500);
+        romanMap.put('M', 1000);
+
+        if (roman == null || roman.isEmpty() || !roman.matches("^M{0,4}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})$")) {
+            return -1;
+        }
+
+        int length = roman.length();
+        int result = 0;
+
+        for (int i = 0; i < length; i++) {
+            char current = roman.charAt(i);
+
+            int currentVal = romanMap.get(current);
+            int nextVal = 0;
+
+            if (i + 1 < length) {
+                char next = roman.charAt(i + 1);
+
+                nextVal = romanMap.get(next);
+            }
+
+            if (currentVal < nextVal) {
+                result -= currentVal;
+            } else {
+                result += currentVal;
+            }
+        }
+
+        return result;
     }
 
 

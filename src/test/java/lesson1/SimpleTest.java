@@ -57,8 +57,8 @@ public class SimpleTest {
     @Test
     @Tag(name = "Trivial")
     public void lengthInMeters() {
-        assertEquals(55.96, Simple.lengthInMeters(8, 2, 11), 0.01);
-        assertEquals(6.4, Simple.lengthInMeters(1, 0, 0), 0.01);
+        assertEquals(18.98, Simple.lengthInMeters(8, 2, 11), 0.01);
+        assertEquals(2.13, Simple.lengthInMeters(1, 0, 0), 0.01);
     }
 
     @Test

@@ -1,5 +1,7 @@
 package lesson2.task2;
 
+import java.time.YearMonth;
+
 import static lesson1.Simple.sqr;
 
 public class Logical {
@@ -19,8 +21,15 @@ public class Logical {
      * Определить, счастливое ли заданное число, вернуть true, если это так.
      */
     public static boolean isNumberHappy(int number) {
-        //TODO
-        return false;
+        int firstDigit = number / 1000;
+        int secondDigit = (number / 100) % 10;
+        int thirdDigit = (number / 10) % 10;
+        int fourthDigit = number % 10;
+
+        int sumFirstTwo = firstDigit + secondDigit;
+        int sumLastTwo = thirdDigit + fourthDigit;
+
+        return sumFirstTwo == sumLastTwo;
     }
 
     /**
@@ -31,8 +40,7 @@ public class Logical {
      * Считать, что ферзи не могут загораживать друг друга.
      */
     public static boolean queenThreatens(int x1, int y1, int x2, int y2) {
-        //TODO
-        return false;
+        return x1 == x2 || y1 == y2 || Math.abs(x1 - x2) == Math.abs(y1 - y2);
     }
 
     /**
@@ -42,8 +50,9 @@ public class Logical {
      * Вернуть число дней в этом месяце этого года по григорианскому календарю.
      */
     public static int daysInMonth(int month, int year) {
-        //TODO
-        return 0;
+        YearMonth yearMonth = YearMonth.of(year, month);
+
+        return yearMonth.lengthOfMonth();
     }
 
     /**
@@ -54,8 +63,10 @@ public class Logical {
      * Вернуть true, если утверждение верно
      */
     public static boolean circleInside(double x1, double y1, double r1, double x2, double y2, double r2) {
-        //TODO
-        return false;
+        // расстояние между двумя точками sqrt(sqr(x2 - x1) + sqr(y2 - y1))
+        double distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+        return distance + r1 <= r2;
     }
 
     /**
@@ -68,7 +79,8 @@ public class Logical {
      * Вернуть true, если кирпич пройдёт
      */
     public static boolean brickPasses(int a, int b, int c, int r, int s) {
-        //TODO
-        return false;
+        return (a <= r && b <= s) || (a <= s && b <= r) ||
+               (a <= r && c <= s) || (a <= s && c <= r) ||
+               (b <= r && c <= s) || (b <= s && c <= r);
     }
 }
